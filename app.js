@@ -14,6 +14,11 @@ function ready(res) {
   let mapHeight = 550;
   let minYear = 1820;
   let maxYear = 1880;
+  let currentYear = minYear;
+
+  let yearTitle = d3.select("#year");
+
+  yearTitle.text(currentYear);
 
   let border = topojson.feature(
     borderRaw,
@@ -72,9 +77,12 @@ function ready(res) {
   const purchases_geo = d3.selectAll(".purchase");
 
   function update(year) {
+    currentYear = year;
     if (year == maxYear) {
+      yearTitle.text("All");
       purchases_geo.style("opacity", "1");
     } else {
+      yearTitle.text(currentYear);
       purchases_geo
         .filter((d) => d.properties.YEAR > year)
         .style("opacity", "0");
@@ -102,8 +110,6 @@ function ready(res) {
     .call(slider);
 
   function play() {
-    let currentYear = slider.value();
-
     const playAction = setInterval(() => {
       if (currentYear == maxYear) {
         clearInterval(playAction);
@@ -111,6 +117,10 @@ function ready(res) {
       currentYear = currentYear + 1;
       slider.value(currentYear);
     }, 300);
+
+    d3.select("#pause").on("click", () => {
+      clearInterval(playAction);
+    });
   }
 
   d3.select("#play").on("click", play);
