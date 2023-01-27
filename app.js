@@ -46,8 +46,8 @@ function ready(res) {
   let pathPurchases = d3.geoPath().projection(purchasesProj);
 
   let color = d3
-    .scaleSequential(d3.interpolateMagma)
-    .domain([minYear, maxYear]);
+    .scaleSequential(d3.interpolateGreens)
+    .domain([maxYear, minYear]);
   let getColor = (d) => color(d.properties.YEAR);
 
   mapSvg
@@ -124,4 +124,9 @@ function ready(res) {
   }
 
   d3.select("#play").on("click", play);
+  d3.select("body").on("keypress", (e) => {
+    if (e.keyCode == 13) {
+      play();
+    }
+  });
 }
